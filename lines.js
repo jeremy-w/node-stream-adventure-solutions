@@ -5,13 +5,13 @@ var alt = function (odd_fn, even_fn) {
   var f = even_fn;
   return function (buffer) {
     f = (f === even_fn) ? odd_fn : even_fn
-    f(this, buffer)
+    f.call(this, buffer)
   }
 }
 
 process.stdin
   .pipe(split())
   .pipe(through(alt(
-    function (t, buffer) { t.queue(buffer.toString().toLowerCase() + '\n') },
-    function (t, buffer) { t.queue(buffer.toString().toUpperCase() + '\n') })))
+    function (buffer) { this.queue(buffer.toString().toLowerCase() + '\n') },
+    function (buffer) { this.queue(buffer.toString().toUpperCase() + '\n') })))
   .pipe(process.stdout)
