@@ -1,17 +1,13 @@
 var through = require('through')
 var split = require('split')
 
-var alt = (function () {
-  var n = 0
-  var is_odd = function (n) { return (n % 2) == 1 }
-  return function (odd_fn, even_fn) {
-    return function (buffer) {
-      n += 1
-      var f = is_odd(n) ? odd_fn : even_fn
-      f(this, buffer)
-    }
+var alt = function (odd_fn, even_fn) {
+  var f = even_fn;
+  return function (buffer) {
+    f = (f === even_fn) ? odd_fn : even_fn
+    f(this, buffer)
   }
-})()
+}
 
 process.stdin
   .pipe(split())
