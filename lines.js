@@ -9,9 +9,16 @@ var alt = function (odd_fn, even_fn) {
   }
 }
 
+var enqueue_after = function (string_fn) {
+  return function (buffer) {
+    var value = string_fn.call(buffer.toString()) + '\n'
+    this.queue(value)
+  }
+}
+
 process.stdin
   .pipe(split())
   .pipe(through(alt(
-    function (buffer) { this.queue(buffer.toString().toLowerCase() + '\n') },
-    function (buffer) { this.queue(buffer.toString().toUpperCase() + '\n') })))
+    enqueue_after(String.prototype.toLowerCase),
+    enqueue_after(String.prototype.toUpperCase))))
   .pipe(process.stdout)
