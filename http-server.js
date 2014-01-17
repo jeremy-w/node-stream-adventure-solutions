@@ -12,8 +12,7 @@ var server = http.createServer(function (req, res) {
     if (req.method === 'POST') {
         req
         .pipe(through(to_upper))
-        .pipe(through(function (buffer) { res.write(buffer) },
-                      function ()       { res.end() }));
+        .pipe(res);
     }
 });
 server.listen(process.argv[2]);
