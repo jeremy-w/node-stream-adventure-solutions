@@ -45,6 +45,7 @@ module.exports = function () {
       json = JSON.stringify(record)
       this.queue(json)
       this.queue('\n')
+      this.queue(null)
     }),
     zlib.createGzip()
   )
