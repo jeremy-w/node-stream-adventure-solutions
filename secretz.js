@@ -10,9 +10,9 @@ var gunzip = require('zlib').createGunzip()
 var through = require('through')
 var parser = require('tar').Parse()
 parser.on('entry', function (entry) {
-  var name = entry.path
-  if (name.lastIndexOf('/') === (name.length - 1)) return
+  if (entry.type !== 'File') return
 
+  var name = entry.path
   var hasher = crypto.createHash('md5')
   entry.pipe(hasher).pipe(through(function write_line(hash_buffer) {
     var hash = hash_buffer.toString('hex')
